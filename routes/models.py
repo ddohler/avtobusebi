@@ -5,5 +5,9 @@ from django.contrib.gis.db import models as gismodels
 class Route(models.Model):
     number = models.CharField(max_length=10)
     create_date = models.DateTimeField(auto_now_add=True)
-    path = gismodels.LineStringField(srid=2593)
+    is_active = models.BooleanField(default=True)
+    path = gismodels.LineStringField(srid=900913)
     objects = gismodels.GeoManager()
+
+    def __unicode__(self):
+        return self.number

@@ -1,5 +1,6 @@
 from django.contrib import admin
 from olwidget.admin import GeoModelAdmin
+from django.contrib.gis import admin as gisadmin
 from routes.models import Route
 
 class RouteGeoAdmin(GeoModelAdmin):
@@ -10,8 +11,9 @@ class RouteGeoAdmin(GeoModelAdmin):
         'default_zoom': 13,
         'zoom_to_data_extent': False,
         'map_options': {
-            'projection': 'EPSG:900913',
-            'display_projection': 'EPSG:900913',
+            'projection': 'EPSG:3857',
+            'display_projection': 'EPSG:3857',
         }
     }
-admin.site.register(Route,RouteGeoAdmin)
+admin.site.register(Route,gisadmin.OSMGeoAdmin)
+#admin.site.register(Route,GeoModelAdmin)

@@ -1,0 +1,14 @@
+{% load i18n %}
+<html>
+<head>
+    <title>"Avtobusebi.ge | {% block title %}{% trans Tbilisi %}{% endblock %}</title>
+    {% block css %}{% endblock %}
+    <script type="text/javascript" src="/media/jquery-1.4.4.min.js"></script>
+    {% block script %}
+    {% endblock %}
+</head>
+<body>
+{% block content %}{% endblock %}
+{% block bottomscript %}{% endblock %}
+</body>
+<html>

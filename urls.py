@@ -16,6 +16,7 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
      (r'^admin/', include(admin.site.urls)),
+     (r'^$', 'routes.views.main'),
 )
 
 if settings.LOCAL_DEV:

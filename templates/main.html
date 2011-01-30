@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block script %}
+{% if olmap %}{{ olmap.media }}{% endif %}
+{% endblock %}<!--script-->
+
+{% block content %}
+<ul id="routes-list">
+    {% for route in routes %}
+        <li>{{ route.number }}</li>
+    {% endfor %}
+</ul>
+{% if olmap %}{{ olmap }}{% endif %}
+{% endblock %} <!--content-->
+{% block bottomscript %}
+<script type="text/javascript">
+    $(document).ready(function(){ // Hide/Show overlays on clicking corresponding <li>s.
+        $('#routes-list li').click(function() { 
+            layer = myMap.getLayersByName($(this).html())[0];
+            if(layer.getVisibility()){ // Layer is visible
+                $(this).css('background-color','white');
+                layer.setVisibility(false);
+            }else{
+                $(this).css('background-color','green');
+                layer.setVisibility(true);
+            }
+        });
+    });
+</script>
+{% endblock bottomscript %}

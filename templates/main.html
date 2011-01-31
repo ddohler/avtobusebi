@@ -14,13 +14,18 @@
 {% block bottomscript %}
 <script type="text/javascript">
     $(document).ready(function(){ // Hide/Show overlays on clicking corresponding <li>s.
+        // Turn off all overlayer to start
+        for(i=1; i<myMap.layers.length-1; i++) { // Skip base layer(0) and last layer, which is apparently important.
+            myMap.layers[i].setVisibility(false);
+        }
+        // Toggle overlayer when corresponding route number is clicked
         $('#routes-list li').click(function() { 
             layer = myMap.getLayersByName($(this).html())[0];
             if(layer.getVisibility()){ // Layer is visible
-                $(this).css('background-color','white');
+                $(this).removeClass('highlight');
                 layer.setVisibility(false);
             }else{
-                $(this).css('background-color','green');
+                $(this).addClass('highlight');
                 layer.setVisibility(true);
             }
         });

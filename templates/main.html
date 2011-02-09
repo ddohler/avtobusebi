@@ -63,7 +63,8 @@
                     // Set the layer's z-index to just above the z-index of the topmost
                     // overlay (which is not the topmost layer, hence the -1).
                     // OpenLayers leaves a space of 5 between each overlay, apparently.
-                    layer.setZIndex(myMap.Z_INDEX_BASE.Overlay+((myMap.layers.length-1)*5)+1);
+                    //layer.setZIndex(myMap.Z_INDEX_BASE.Overlay+((myMap.layers.length-1)*5)+1);
+                    myMap.setLayerIndex(layer,myMap.layers.length-2); // Top of stack 
                     layer.redraw();
                     $(this).addClass('highlight');
                     var z = layer.getZIndex();
@@ -73,7 +74,6 @@
                 layer = myMap.getLayersByName($(this).html())[0];
                 if(layer.getVisibility()){
                     layer.styleMap.styles.default.setDefaultStyle(noHighlight);
-                    myMap.resetLayersZIndex(); // This might be too costly to do on each mouseout.
                     layer.redraw();
                     $(this).removeClass('highlight');
                     var z = layer.getZIndex();

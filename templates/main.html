@@ -14,21 +14,72 @@
 {% block bottomscript %}
 <script type="text/javascript">
     $(document).ready(function(){ // Hide/Show overlays on clicking corresponding <li>s.
-        // Turn off all overlayer to start
+        // Toggle color change on mouseover
+        var highlight = {
+            'fillColor': '#ff0000',
+            'fillOpacity': 0.5,
+            'pointRadius': 6,
+            'strokeColor': '#ff0000',
+            'strokeWidth': 2
+        };
+        var noHighlight = {
+            'fillColor': '#5d797e',
+            'fillOpacity': 0.5,
+            'pointRadius': 6,
+            'strokeColor': '#5d797e',
+            'strokeWidth': 2
+        };
+
+        // Turn off all overlays to start
+        // I would rather put all the geometries in one layer
+        // because I suspect it would save memory and boost
+        // performance, but there doesn't seem to be an easy
+        // way to do that with OpenLayers 2.10 and the current
+        // version of oldwidget.
         for(i=1; i<myMap.layers.length-1; i++) { // Skip base layer(0) and last layer, which is apparently important.
-            myMap.layers[i].setVisibility(false);
+            var layer = myMap.layers[i];
+            layer.setVisibility(false);
+            layer.styleMap.styles.default.setDefaultStyle(noHighlight);
         }
-        // Toggle overlayer when corresponding route number is clicked
+        // Toggle overlay when corresponding route number is clicked
         $('#routes-list li').click(function() { 
             layer = myMap.getLayersByName($(this).html())[0];
-            if(layer.getVisibility()){ // Layer is visible
-                $(this).removeClass('highlight');
+            if(layer.getVisibility()){ 
+                $(this).removeClass('selected');
+                $(this).removeClass('highlight'); // Also remove the mouseover class
                 layer.setVisibility(false);
             }else{
+                $(this).addClass('selected');
                 $(this).addClass('highlight');
                 layer.setVisibility(true);
             }
-        });
+        }); // click
+        
+        $('#routes-list li').hover(
+            function() { // Mouse-in
+                layer = myMap.getLayersByName($(this).html())[0];
+                if(layer.getVisibility()){ // Only bother highlighting if visible
+                    layer.styleMap.styles.default.setDefaultStyle(highlight);
+                    // Set the layer's z-index to just above the z-index of the topmost
+                    // overlay (which is not the topmost layer, hence the -1).
+                    // OpenLayers leaves a space of 5 between each overlay, apparently.
+                    layer.setZIndex(myMap.Z_INDEX_BASE.Overlay+((myMap.layers.length-1)*5)+1);
+                    layer.redraw();
+                    $(this).addClass('highlight');
+                    var z = layer.getZIndex();
+                }
+            },
+            function() { // Mouse-out
+                layer = myMap.getLayersByName($(this).html())[0];
+                if(layer.getVisibility()){
+                    layer.styleMap.styles.default.setDefaultStyle(noHighlight);
+                    myMap.resetLayersZIndex(); // This might be too costly to do on each mouseout.
+                    layer.redraw();
+                    $(this).removeClass('highlight');
+                    var z = layer.getZIndex();
+                }
+            }
+        ); // hover
     });
 </script>
 {% endblock bottomscript %}

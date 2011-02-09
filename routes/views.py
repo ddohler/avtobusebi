@@ -12,7 +12,7 @@ def main(request):
     for route in all_routes:
         route_layers.append(InfoLayer([[route.path, route.number]],{'name': route.number}))
     # construct olwidget map 
-    olmap = Map(vector_layers=route_layers,options={'map_options': {
+    olmap = Map(vector_layers=route_layers,options={'map_div_style':{'background-color': 'white'},'map_options': {
         'controls': ['Navigation','PanZoom'], 'display_projection':'EPSG:3857'}},
         template='olwidget-custom.html')
     # render

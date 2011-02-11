@@ -13,6 +13,37 @@
 {% endblock %} <!--content-->
 {% block bottomscript %}
 <script type="text/javascript">
+    // Trace along a path.
+    function tracePath(layer, lineString){
+        var drawLayer = myMap.getLayersByName('draw')[0];
+        myMap.setLayerIndex(drawLayer, myMap.layers.length-2); // Push to top of layer stack
+        drawLayer.setVisibility(true);
+        drawLayer.redraw();
+
+        var allVerts = lineString.geometry.getVertices();
+        var newFeature = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString(new Array(allVerts[0])));
+        drawLayer.addFeatures(new Array(newFeature));
+        var tracerFeature = drawLayer.features[0];
+        intervalID = window.setInterval(animate,25);
+        
+        function animate() {
+            if(tracerFeature.geometry.components.length == allVerts.length) { 
+                finishTrace();
+                return; 
+            }
+            tracerFeature.geometry.components.push(allVerts[tracerFeature.geometry.components.length]);
+            drawLayer.drawFeature(tracerFeature);
+        }
+
+        function finishTrace(){
+            window.clearInterval(intervalID)
+            drawLayer.removeFeatures(tracerFeature);
+            tracerFeature.destroy();
+            drawLayer.redraw();
+            //drawLayer.setVisibility(false);
+            layer.setVisibility(true);
+        }
+    }
     $(document).ready(function(){ // Hide/Show overlays on clicking corresponding <li>s.
         // Toggle color change on mouseover
         var highlight = {
@@ -41,6 +72,7 @@
             layer.setVisibility(false);
             layer.styleMap.styles.default.setDefaultStyle(noHighlight);
         }
+        myMap.getLayersByName('draw')[0].styleMap.styles.default.setDefaultStyle(highlight);
         // Toggle overlay when corresponding route number is clicked
         $('#routes-list li').click(function() { 
             layer = myMap.getLayersByName($(this).html())[0];
@@ -51,23 +83,23 @@
             }else{
                 $(this).addClass('selected');
                 $(this).addClass('highlight');
-                layer.setVisibility(true);
+                //layer.setVisibility(true);
+                tracePath(layer, layer.features[0]); // Each layer has only one feature.
             }
         }); // click
         
+        // Highlight route during hover over route number
         $('#routes-list li').hover(
             function() { // Mouse-in
                 layer = myMap.getLayersByName($(this).html())[0];
                 if(layer.getVisibility()){ // Only bother highlighting if visible
                     layer.styleMap.styles.default.setDefaultStyle(highlight);
                     // Set the layer's z-index to just above the z-index of the topmost
-                    // overlay (which is not the topmost layer, hence the -1).
-                    // OpenLayers leaves a space of 5 between each overlay, apparently.
-                    //layer.setZIndex(myMap.Z_INDEX_BASE.Overlay+((myMap.layers.length-1)*5)+1);
-                    myMap.setLayerIndex(layer,myMap.layers.length-2); // Top of stack 
+                    // overlay (leaving the path tracing layer and RootContainer
+                    // layers above it, hence the -3).
+                    myMap.setLayerIndex(layer,myMap.layers.length-3); 
                     layer.redraw();
                     $(this).addClass('highlight');
-                    var z = layer.getZIndex();
                 }
             },
             function() { // Mouse-out
@@ -76,7 +108,6 @@
                     layer.styleMap.styles.default.setDefaultStyle(noHighlight);
                     layer.redraw();
                     $(this).removeClass('highlight');
-                    var z = layer.getZIndex();
                 }
             }
         ); // hover

@@ -7,4 +7,11 @@
         ], 
         {{ map_opts|safe }}
     );
+    var drawLayer = new OpenLayers.Layer.Vector('draw');
+    myMap.addLayer(drawLayer);
+    drawLayer = myMap.getLayersByName('draw')[0];
+    drawLayer.setVisibility(true);
+    myMap.raiseLayer(drawLayer, -1);
+    drawLayer.redraw();
+    
 </script>

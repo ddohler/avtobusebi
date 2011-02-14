@@ -11,3 +11,27 @@ class Route(models.Model):
 
     def __unicode__(self):
         return self.number
+
+# Types of transit (bus, marshrutka, etc.)
+class Mode(models.Model):
+
+    name = models.CharField(max_length=30)
+
+    def __unicode__(self):
+        return self.name
+
+# A stop or station
+class Stop(models.Model):
+    geometry = gismodels.PointField(srid=3857)
+    desc = models.CharField(max_length=50)
+
+    def __unicode__(self):
+        return self.desc
+
+# A segment of the path that a given route follows
+class Path(models.Model):
+    geometry = gismodels.LineStringField(srid=3857)
+    desc = models.CharField(max_length=50)
+
+    def __unicode__(self):
+        return self.desc

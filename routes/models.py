@@ -1,37 +1,62 @@
 from django.db import models
 from django.contrib.gis.db import models as gismodels
+from transmeta import TransMeta
 
 # Create your models here.
 class Route(models.Model):
-    number = models.CharField(max_length=10)
+    __metaclass__ = TransMeta
+
+    name = models.CharField(max_length=50)
+    desc = models.TextField(max_length=200,blank=True)
     create_date = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
-    path = gismodels.LineStringField(srid=3857) #EPSG code for the Google or 900913 projection
-    objects = gismodels.GeoManager()
+    
+    path = models.ForeignKey('Path')
+    stops = models.ManyToManyField('Stop',null=True)
+    mode = models.ForeignKey('Mode')
 
     def __unicode__(self):
-        return self.number
+        return self.name
 
-# Types of transit (bus, marshrutka, etc.)
+    class Meta:
+        translate = ('name','desc',)
+
+# Modes of transit (bus, marshrutka, etc.)
 class Mode(models.Model):
+    __metaclass__ = TransMeta
 
     name = models.CharField(max_length=30)
 
     def __unicode__(self):
         return self.name
 
-# A stop or station
+    class Meta:
+        translate = ('name',)
+
+# A stop or station on a route
 class Stop(models.Model):
+    __metaclass__ = TransMeta
+
     geometry = gismodels.PointField(srid=3857)
+    objects = gismodels.GeoManager()
     desc = models.CharField(max_length=50)
 
     def __unicode__(self):
         return self.desc
 
-# A segment of the path that a given route follows
+    class Meta:
+        translate = ('desc',)
+
+# The path that a given route (or routes) follows
 class Path(models.Model):
+    __metaclass__ = TransMeta
+
     geometry = gismodels.LineStringField(srid=3857)
+    objects = gismodels.GeoManager()
     desc = models.CharField(max_length=50)
 
     def __unicode__(self):
         return self.desc
+
+    class Meta:
+        translate = ('desc',)

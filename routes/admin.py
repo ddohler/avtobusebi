@@ -1,7 +1,7 @@
 from django.contrib import admin
 from olwidget.admin import GeoModelAdmin
 from django.contrib.gis import admin as gisadmin
-from routes.models import Route
+from routes.models import Route, Stop, Mode, Path
 
 class RouteGeoAdmin(GeoModelAdmin):
     options = {
@@ -15,5 +15,17 @@ class RouteGeoAdmin(GeoModelAdmin):
             'display_projection': 'EPSG:3857',
         }
     }
+# Change comments to get text field for batch input
 admin.site.register(Route,gisadmin.OSMGeoAdmin)
+#admin.site.register(Route)
 #admin.site.register(Route,GeoModelAdmin)
+
+# Switch comments to get a text field for direct input
+admin.site.register(Stop,gisadmin.OSMGeoAdmin)
+#admin.site.register(Stop)
+
+admin.site.register(Mode)
+
+# Switch comments to get a text field for direct input
+admin.site.register(Path,gisadmin.OSMGeoAdmin)
+#admin.site.register(Path)

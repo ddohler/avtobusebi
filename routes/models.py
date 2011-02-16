@@ -12,7 +12,7 @@ class Route(models.Model):
     is_active = models.BooleanField(default=True)
     
     path = models.ForeignKey('Path')
-    stops = models.ManyToManyField('Stop',null=True)
+    stops = models.ManyToManyField('Stop',blank=True,null=True)
     mode = models.ForeignKey('Mode')
 
     def __unicode__(self):

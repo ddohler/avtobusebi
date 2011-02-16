@@ -6,7 +6,7 @@
 {% block content %}
 <ul id="routes-list">
     {% for route in routes %}
-        <li>{{ route.number }}</li>
+        <li>{{ route.name }}</li>
     {% endfor %}
 </ul>
 {% if olmap %}{{ olmap }}{% endif %}

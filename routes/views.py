@@ -1,7 +1,7 @@
 from django.shortcuts import render_to_response, get_object_or_404
 from olwidget.widgets import Map, InfoLayer
 from routes.models import Route
-from django.contrib.gis.geos import *
+from django.contrib.gis.geos import Point, LineString, fromstr
 
 def main(request):
     # get all routes
@@ -10,11 +10,23 @@ def main(request):
     # construct olwidget layers from routes
     route_layers = []
     for route in all_routes:
-        route_layers.append(InfoLayer([[route.path, route.number]],{'name': route.number}))
-    route_layers.append(InfoLayer([[all_routes[0].path, 'draw']],{'name':'draw'})) # Dummy layer for drawing; erased later
+        route_layers.append(InfoLayer([[route.path.geometry, route.name]],{'name': route.name}))
+
+    # Dummy layer for drawing; erased later.
+    # Using actual Tbilisi data so we don't land somewhere
+    # random if something bad happens...although
+    # that might be a good indication something broke.
+    dummy_geom = fromstr('LINESTRING (4978262.6790810525417328 '+\
+                                      '5118097.6463875807821751, '+\
+                                      '4978283.0049614785239100 '+\
+                                      '5118077.6137111270800233)', srid=3857)
+                    
+    route_layers.append(InfoLayer([[dummy_geom, 'draw']],
+                                  {'name':'draw'}))
     # construct olwidget map 
-    olmap = Map(vector_layers=route_layers,options={'map_div_style':{'background-color': 'white'},'map_options': {
-        'controls': ['Navigation','PanZoom'], 'display_projection':'EPSG:3857'}},
+    olmap = Map(vector_layers=route_layers,options={'map_div_style':{'background-color': 'white'},
+            'map_options': {
+                'controls': ['Navigation','PanZoom'], 'display_projection':'EPSG:3857'}},
         template='olwidget-custom.html')
     # render
     return render_to_response('main.html', {'olmap':olmap,'routes':all_routes,})

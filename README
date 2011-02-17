@@ -1,0 +1,4 @@
+Uses GeoDjango coupled with OpenLayers via olwidget
+and some custom javascript to provide mapping of
+public transportation routes. Originally developed
+for Tbilisi, Georgia.

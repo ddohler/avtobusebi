@@ -70,9 +70,9 @@
         for(i=1; i<myMap.layers.length-1; i++) { // Skip base layer(0) and last layer, which is apparently important.
             var layer = myMap.layers[i];
             layer.setVisibility(false);
-            layer.styleMap.styles.default.setDefaultStyle(noHighlight);
+            layer.styleMap.styles["default"].setDefaultStyle(noHighlight);
         }
-        myMap.getLayersByName('draw')[0].styleMap.styles.default.setDefaultStyle(highlight);
+        myMap.getLayersByName('draw')[0].styleMap.styles["default"].setDefaultStyle(highlight);
         // Toggle overlay when corresponding route number is clicked
         $('#routes-list li').click(function() { 
             layer = myMap.getLayersByName($(this).html())[0];
@@ -93,7 +93,7 @@
             function() { // Mouse-in
                 layer = myMap.getLayersByName($(this).html())[0];
                 if(layer.getVisibility()){ // Only bother highlighting if visible
-                    layer.styleMap.styles.default.setDefaultStyle(highlight);
+                    layer.styleMap.styles["default"].setDefaultStyle(highlight);
                     // Set the layer's z-index to just above the z-index of the topmost
                     // overlay (leaving the path tracing layer and RootContainer
                     // layers above it, hence the -3).
@@ -105,7 +105,7 @@
             function() { // Mouse-out
                 layer = myMap.getLayersByName($(this).html())[0];
                 if(layer.getVisibility()){
-                    layer.styleMap.styles.default.setDefaultStyle(noHighlight);
+                    layer.styleMap.styles["default"].setDefaultStyle(noHighlight);
                     layer.redraw();
                     $(this).removeClass('highlight');
                 }

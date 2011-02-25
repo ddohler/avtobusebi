@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% block script %}
 {% if olmap %}{{ olmap.media }}{% endif %}
 {% endblock %}<!--script-->
@@ -6,7 +7,8 @@
 {% block content %}
 <ul id="routes-list">
     {% for route in routes %}
-        <li>{{ route.name }}</li>
+        <li name="{{route.name}}"><span class="toggle-vis" name="{{route.name}}"><input type="checkbox" />{{ route.name }}</span>
+        <button type="button" name="{{route.name}}" value="trace" class="trace" disabled="true">{% trans "Trace" %}</button></li>
     {% endfor %}
 </ul>
 {% if olmap %}{{ olmap }}{% endif %}

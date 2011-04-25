@@ -1,8 +1,11 @@
 from django.shortcuts import render_to_response, get_object_or_404
 from olwidget.widgets import Map, InfoLayer
-from routes.models import Route
+from routes.models import Route,Path
 from django.contrib.gis.geos import Point, LineString, fromstr
+from django.core import serializers
+from django.http import HttpResponse
 
+# TODO: Stop using olwidget; render JS directly.
 def main(request):
     # get all routes
     all_routes = Route.objects.all().filter(is_active=True)
@@ -30,3 +33,13 @@ def main(request):
         template='olwidget-custom.html')
     # render
     return render_to_response('main.html', {'olmap':olmap,'routes':all_routes,})
+
+# We're crowdsourcing Paths, so this view will dump all paths in the db
+# to JSON in case of malicious users or mistakes.
+def backup(request):
+    all_paths = Path.objects.all()
+    response = HttpResponse()
+    response['mimetype'] = 'text/json'
+    json_srlzr = serializers.get_serializer("json")()
+    json_srlzr.serialize(all_paths, ensure_ascii=False, stream=response)
+    return response

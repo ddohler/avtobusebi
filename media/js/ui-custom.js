@@ -80,23 +80,23 @@ $(document).ready(function(){ // Hide/Show overlays on clicking corresponding <l
     $('#routes-list li').hover(
         function() { // Mouse-in
             layer = myMap.getLayersByName($(this).attr('name'))[0];
+            $(this).addClass('highlight');
+            layer.styleMap.styles["default"].setDefaultStyle(highlight);
             if(layer.getVisibility()){ // Only bother highlighting if visible
-                layer.styleMap.styles["default"].setDefaultStyle(highlight);
                 // Set the layer's z-index so it's the topmost
                 moveToTop(layer);
                 layer.redraw();
-                $(this).addClass('highlight');
-                return true;
             }
+            return true;
         },
         function() { // Mouse-out
             layer = myMap.getLayersByName($(this).attr('name'))[0];
+            layer.styleMap.styles["default"].setDefaultStyle(noHighlight);
+            $(this).removeClass('highlight');
             if(layer.getVisibility()){
-                layer.styleMap.styles["default"].setDefaultStyle(noHighlight);
                 layer.redraw();
-                $(this).removeClass('highlight');
-                return true;
             }
+            return true;
         }
     ); // hover
 });

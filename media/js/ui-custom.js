@@ -112,6 +112,7 @@ function PathTracer(toTrace, canvas, fromLyr){
 
     this.step = function(){
         this.to.geometry.components.push(this.from.geometry.components[this.to.geometry.components.length]);
+        this.to.geometry.calculateBounds();
         this.canvas.redraw();
     };
     this.launch = function(pt) { 

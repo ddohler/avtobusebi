@@ -4,12 +4,13 @@ from routes.models import Route,Path
 from django.contrib.gis.geos import Point, LineString, fromstr
 from django.core import serializers
 from django.http import HttpResponse
+from django.utils.translation import get_language
 
 # TODO: Stop using olwidget; render JS directly.
 def main(request):
     # get all routes
-    all_routes = Route.objects.all().filter(is_active=True)
-    
+    all_routes = Route.objects.all().filter(is_active=True).order_by('name_'+get_language())
+
     # construct olwidget layers from routes
     route_layers = []
     for route in all_routes:

@@ -18,6 +18,7 @@ urlpatterns = patterns('',
      (r'^admin/', include(admin.site.urls)),
      (r'^$', 'routes.views.main'),
      (r'dump/$','routes.views.backup'),
+     (r'^i18n/', include('django.conf.urls.i18n')),
 )
 
 if settings.LOCAL_DEV:

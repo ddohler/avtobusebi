@@ -1,0 +1,33 @@
+# TbilisiBus.info
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Derek Dohler, dohler@gmail.com.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-04-25 13:39+0400\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: settings.py:43
+msgid "Georgian"
+msgstr "ქართული"
+
+#: settings.py:44
+msgid "English"
+msgstr "ინგლისური"
+
+#: templates/base.html:4
+msgid "Home"
+msgstr ""
+
+#: templates/main.html:11
+msgid "Trace"
+msgstr ""

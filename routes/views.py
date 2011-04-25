@@ -39,7 +39,7 @@ def main(request):
 def backup(request):
     all_paths = Path.objects.all()
     response = HttpResponse()
-    response['mimetype'] = 'text/json'
+    response['mimetype'] = 'application/json'
     json_srlzr = serializers.get_serializer("json")()
     json_srlzr.serialize(all_paths, ensure_ascii=False, stream=response)
     return response
